@@ -1,39 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 using vmrentapi.Data;
+using vmrentapi.Models;
 
 namespace vmrentapi.Controllers
 {
     public class DropletController : Controller
     {
         DropletManager dropletManager;
-        public DropletController() 
+        private VMRentDbContext Context;
+
+        public DropletController(VMRentDbContext context)
         {
-            dropletManager = new DropletManager();
+            Context = context;
         }
 
-        public async Task<IActionResult> GetAllDropletAsync()
+        public async Task<IActionResult> GetAllDropletAsync([FromBody] Droplet droplet)
         {
-            var droplets = await dropletManager.GetAllDropletAsync();
-            return Ok(droplets);
+            ApiKey? apiKey = Context.apiKeys.ToList().Where(x => x.Key == droplet.Key).FirstOrDefault();
+            if (apiKey != null)
+            {
+                dropletManager = new DropletManager();
+                var droplets = await dropletManager.GetAllDropletAsync();
+                return Ok(droplets);
+            }
+
+            return Ok("reject");
         }
 
-        public async Task<IActionResult> GetDropletAsync([FromBody] long id)
+        public async Task<IActionResult> GetDropletAsync([FromBody] Droplet droplet)
         {
-            var droplet = await dropletManager.GetDropletAsync(id) ;
-            return Ok(droplet);
+            ApiKey? apiKey = Context.apiKeys.ToList().Where(x => x.Key == droplet.Key).FirstOrDefault();
+            if (apiKey != null)
+            {
+                dropletManager = new DropletManager();
+                var droplet1 = await dropletManager.GetDropletAsync(droplet.Id) ;
+                return Ok(droplet1);
+            } 
+            return Ok("reject");
         }
 
-        public IActionResult CreateDroplet([FromBody] string name, [FromBody] string size, [FromBody] string image)
+        public IActionResult CreateDroplet([FromBody] Droplet droplet)
         {
-            dropletManager.CreateDroplet(name, size, image);
-            return Ok("ok");
+            ApiKey? apiKey = Context.apiKeys.ToList().Where(x => x.Key == droplet.Key).FirstOrDefault();
+            if (apiKey != null)
+            {
+                dropletManager = new DropletManager();
+                dropletManager.CreateDroplet(droplet.name, droplet.size, droplet.image);
+                return Ok("ok");
+            } 
+            return Ok("reject");
         }
 
-        public IActionResult DeleteDroplet([FromBody] long id)
+        public IActionResult DeleteDroplet([FromBody] Droplet droplet)
         {
-            dropletManager.DeleteDroplet(id);
-            return Ok("ok");
+            ApiKey? apiKey = Context.apiKeys.ToList().Where(x => x.Key == droplet.Key).FirstOrDefault();
+            if (apiKey != null)
+            {
+                dropletManager = new DropletManager();
+                dropletManager.DeleteDroplet(droplet.Id);
+                return Ok("ok");
+            } 
+            return Ok("reject");
         }
     }
 }

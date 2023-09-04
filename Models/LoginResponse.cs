@@ -2,5 +2,5 @@
 
 public class LoginResponse
 {
-    
+    public User user;
 }

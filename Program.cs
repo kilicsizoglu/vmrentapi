@@ -1,4 +1,10 @@
+using vmrentapi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<VMRentDbContext>();
+
+builder.Services.AddDbContext<VMRentDbContext>();
 
 // Add services to the container.
 

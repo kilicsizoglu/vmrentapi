@@ -7,7 +7,7 @@ public class VMRentDbContext : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=localhost;TrustServerCertificate=True;Database=VMRentDB;Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer("Server=localhost;database=VMRentDB;UID=sa;PWD=0900tgbyhn.,!;TrustServerCertificate=True;");
         base.OnConfiguring(optionsBuilder);
     }
 

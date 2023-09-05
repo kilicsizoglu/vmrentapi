@@ -29,6 +29,7 @@ namespace vmrentapi.Controllers
                     Key = Guid.NewGuid()
                 };
                 Context.apiKeys.Add(apiKey);
+                return Ok("ok");
             }
         }
         
